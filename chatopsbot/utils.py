@@ -39,7 +39,7 @@ def require_admin(func):
             *args,
             **kwargs,
     ):
-        if update.effective_user.id != ADMIN_TELEGRAM_ID:
+        if str(update.effective_user.id) != ADMIN_TELEGRAM_ID:
             await update.message.reply_text(
                 "⛔ У вас нет доступа к этой команде.",
             )

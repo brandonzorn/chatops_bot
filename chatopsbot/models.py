@@ -138,6 +138,7 @@ class RegistrationRequest(Base):
 
 
 __all__ = [
+    "Base",
     "Role",
     "Service",
     "Team",

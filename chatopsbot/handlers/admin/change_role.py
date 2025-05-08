@@ -12,10 +12,12 @@ from telegram.ext import (
 
 from database import session
 from models import Employee, Role
+from utils import require_admin
 
 CHOOSE_EMPLOYEE, CHOOSE_NEW_ROLE = range(2)
 
 
+@require_admin
 async def start_change_role(update: Update, _):
     employees = session.query(Employee).all()
     if not employees:

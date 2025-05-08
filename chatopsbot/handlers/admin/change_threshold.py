@@ -14,10 +14,12 @@ from telegram.ext import (
 
 from database import session
 from models import Service
+from utils import require_admin
 
 CHOOSE_SERVICE, ENTER_THRESHOLD = range(2)
 
 
+@require_admin
 async def start_set_threshold(update: Update, _):
     services = session.query(Service).all()
     if not services:

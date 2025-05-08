@@ -11,11 +11,12 @@ from telegram.ext import (
 
 from database import session
 from models import Employee
-
+from utils import require_admin
 
 CHOOSE_EMPLOYEE = 0
 
 
+@require_admin
 async def start_remove_user(update: Update, _):
     employees = session.query(Employee).all()
     if not employees:

@@ -12,10 +12,12 @@ from telegram.ext import (
 
 from database import session
 from models import Service, ServiceSubscription, Employee
+from utils import require_registration
 
 CHOOSE_SERVICE = 3
 
 
+@require_registration
 async def start_subscribe(update: Update, _):
     user_id = update.effective_user.id
 
@@ -101,6 +103,7 @@ subscribe_conv = ConversationHandler(
 )
 
 
+@require_registration
 async def silence(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         hours = int(context.args[0])

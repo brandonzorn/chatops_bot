@@ -12,10 +12,12 @@ from telegram.ext import (
 
 from database import session
 from models import RegistrationRequest, Employee
+from utils import require_admin
 
 CHOOSE_REQUEST, HANDLE_ACTION = range(2)
 
 
+@require_admin
 async def start_review(update: Update, _):
     requests = session.query(RegistrationRequest).all()
     if not requests:

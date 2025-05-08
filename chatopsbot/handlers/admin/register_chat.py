@@ -11,10 +11,12 @@ from telegram.ext import (
 
 from database import session
 from models import Role, Team
+from utils import require_admin
 
 CHOOSE_TYPE, CHOOSE_ROLE, CHOOSE_TEAM = range(3)
 
 
+@require_admin
 async def start_register(update: Update, _):
     chat = update.effective_chat
 

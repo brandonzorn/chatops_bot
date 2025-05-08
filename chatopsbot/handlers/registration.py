@@ -71,8 +71,8 @@ async def ask_phone(update: Update, context: ContextTypes.DEFAULT_TYPE):
             KeyboardButton(
                 "📱 Отправить номер телефона",
                 request_contact=True,
-            )
-        ]
+            ),
+        ],
     ]
     markup = ReplyKeyboardMarkup(
         keyboard,

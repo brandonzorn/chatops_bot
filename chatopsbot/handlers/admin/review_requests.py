@@ -12,7 +12,7 @@ from telegram.ext import (
 
 from database import session
 from models import RegistrationRequest, Employee
-from utils import require_admin
+from utils import require_admin, send_invite_links
 
 CHOOSE_REQUEST, HANDLE_ACTION = range(2)
 
@@ -94,6 +94,9 @@ async def handle_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
         session.add(employee)
         session.delete(request)
         session.commit()
+
+        await send_invite_links(employee, context)
+
         await query.edit_message_text(
             f"✅ Заявка от {employee.full_name} одобрена.",
         )

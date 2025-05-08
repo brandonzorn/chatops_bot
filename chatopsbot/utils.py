@@ -46,3 +46,35 @@ def require_admin(func):
             return None
         return await func(update, context, *args, **kwargs)
     return wrapper
+
+
+async def send_invite_links(employee, context: ContextTypes.DEFAULT_TYPE):
+    chat_ids = [
+        employee.team.chat_id,
+        employee.role.chat_id,
+    ]
+
+    links = []
+    for chat_id in chat_ids:
+        if not chat_id:
+            continue
+        link = await context.bot.create_chat_invite_link(
+            chat_id=chat_id,
+            member_limit=1,
+            expire_date=None,
+            creates_join_request=False,
+        )
+        links.append(link.invite_link)
+
+    await context.bot.send_message(
+        chat_id=employee.id,
+        text=f"Добро пожаловать! "
+             f"Вот ссылки на чаты вашей команды: {'\n'.join(links)}",
+    )
+
+
+__all__ = [
+    "require_admin",
+    "require_registration",
+    "send_invite_links",
+]

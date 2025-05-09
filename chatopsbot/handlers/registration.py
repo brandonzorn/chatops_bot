@@ -4,6 +4,7 @@ from telegram import (
     InlineKeyboardButton,
     KeyboardButton,
     ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
 )
 from telegram.ext import (
     ContextTypes,
@@ -106,7 +107,10 @@ async def save_registration(
         id=telegram_id,
     ).first()
     if existing:
-        await update.message.reply_text("Вы уже подали заявку.")
+        await update.message.reply_text(
+            "Вы уже подали заявку.",
+            reply_markup=ReplyKeyboardRemove(),
+        )
         return ConversationHandler.END
 
     request = RegistrationRequest(
@@ -122,6 +126,7 @@ async def save_registration(
 
     await update.message.reply_text(
         "Заявка на регистрацию отправлена. Ожидайте подтверждения.",
+        reply_markup=ReplyKeyboardRemove(),
     )
     return ConversationHandler.END
 

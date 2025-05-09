@@ -88,6 +88,7 @@ async def handle_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
             id=request.id,
             full_name=request.full_name,
             telegram_username=request.telegram_username,
+            phone_number=request.phone_number,
             role_id=request.role_id,
             team_id=request.team_id,
         )

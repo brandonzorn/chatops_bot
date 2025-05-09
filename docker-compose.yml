@@ -1,0 +1,37 @@
+name: "chat-ops"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - ./etc_chatops/postgres_data:/var/lib/postgresql/data
+
+  gitlab-webhook:
+    build: .
+    container_name: gitlab-webhook
+    command: ["uvicorn", "integrations.gitlab_webhook:app", "--host", "0.0.0.0", "--port", "8000"]
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+
+  chat-ops-bot:
+    build: .
+    container_name: chat-ops-bot
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    volumes:
+      - ./etc_chatops/logs:/chatops/logs
+      - ./etc_chatops/sqlite:/chatops/sqlite
+    depends_on:
+      - postgres

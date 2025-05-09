@@ -84,15 +84,23 @@ async def handle_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     if action == "approve":
-        employee = Employee(
-            id=request.id,
-            full_name=request.full_name,
-            telegram_username=request.telegram_username,
-            phone_number=request.phone_number,
-            role_id=request.role_id,
-            team_id=request.team_id,
-        )
-        session.add(employee)
+        employee = session.query(Employee).filter_by(id=request.id).first()
+        if employee:
+            employee.full_name = request.full_name
+            employee.telegram_username = request.telegram_username
+            employee.phone_number = request.phone_number
+            employee.role_id = request.role_id
+            employee.team_id = request.team_id
+        else:
+            employee = Employee(
+                id=request.id,
+                full_name=request.full_name,
+                telegram_username=request.telegram_username,
+                phone_number=request.phone_number,
+                role_id=request.role_id,
+                team_id=request.team_id,
+            )
+            session.add(employee)
         session.delete(request)
         session.commit()
 

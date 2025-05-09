@@ -3,7 +3,7 @@ import logging
 
 from telegram.ext import Application
 
-from chatopsbot.config import BOT_TOKEN
+from config import BOT_TOKEN
 from handlers.admin import (
     register_chat_conv,
     review_conv,
@@ -17,6 +17,7 @@ from handlers.registration import registration_conv
 
 __all__ = []
 
+from handlers.reports import weekly_report_handler
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -40,6 +41,7 @@ def main() -> None:
     application.add_handler(subscribe_conv)
     application.add_handler(silence_handler)
     application.add_handler(acknowledge_handler)
+    application.add_handler(weekly_report_handler)
 
     # admin
     application.add_handler(register_chat_conv)

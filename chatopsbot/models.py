@@ -8,6 +8,7 @@ from sqlalchemy import (
     Text,
     Enum,
     DateTime,
+    Boolean,
 )
 from sqlalchemy.orm import relationship, declarative_base
 
@@ -141,12 +142,38 @@ class RegistrationRequest(Base):
     team = relationship("Team")
 
 
+class ServiceIncident(Base):
+    __tablename__ = "service_incidents"
+
+    id = Column(Integer, primary_key=True)
+    service_id = Column(
+        Integer,
+        ForeignKey("services.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    message_id = Column(Integer, nullable=False)
+    acknowledged = Column(Boolean, default=False, nullable=False)
+    timestamp = Column(
+        DateTime,
+        default=datetime.datetime.now(tz=TIMEZONE),
+    )
+
+    service = relationship("Service", lazy="joined")
+
+    def get_service_chat(self):
+        return self.service.team.chat_id
+
+    def acknowledge(self):
+        self.acknowledged = True
+
+
 __all__ = [
     "Base",
+    "Employee",
+    "RegistrationRequest",
     "Role",
     "Service",
-    "Team",
-    "Employee",
+    "ServiceIncident",
     "ServiceSubscription",
-    "RegistrationRequest",
+    "Team",
 ]

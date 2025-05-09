@@ -1,11 +1,9 @@
 import datetime
 import logging
 
-from telegram.error import BadRequest
-from telegram.ext import Application, ContextTypes
+from telegram.ext import Application
 
 from chatopsbot.config import BOT_TOKEN
-from database import session
 from handlers.admin import (
     register_chat_conv,
     review_conv,
@@ -13,14 +11,12 @@ from handlers.admin import (
     change_conv,
     threshold_conv,
 )
+from handlers.alerts import acknowledge_handler, check_all_services
 from handlers.notifications import subscribe_conv, silence_handler
 from handlers.registration import registration_conv
 
 __all__ = []
 
-from integrations.loki_integration import check_service
-
-from models import Service
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -28,20 +24,6 @@ logging.basicConfig(
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
-
-
-async def check_all_services(context: ContextTypes.DEFAULT_TYPE):
-    services = session.query(Service).all()
-    for service in services:
-        result = await check_service(service)
-        if result > service.notification_threshold:
-            try:
-                await context.bot.send_message(
-                    chat_id=service.team.chat_id,
-                    text=f"Превышен порог для сервиса {service.name}",
-                )
-            except BadRequest:
-                logger.error(f"Чат {service.name} не найден.")
 
 
 def main() -> None:
@@ -57,6 +39,7 @@ def main() -> None:
     application.add_handler(registration_conv)
     application.add_handler(subscribe_conv)
     application.add_handler(silence_handler)
+    application.add_handler(acknowledge_handler)
 
     # admin
     application.add_handler(register_chat_conv)

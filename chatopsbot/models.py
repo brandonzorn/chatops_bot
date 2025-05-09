@@ -105,8 +105,8 @@ class ServiceSubscription(Base):
 
     subscription_end = Column(DateTime, nullable=True)
 
-    employee = relationship("Employee")
-    service = relationship("Service")
+    employee = relationship("Employee", lazy="joined")
+    service = relationship("Service", lazy="joined")
 
     def is_subscription_active(self):
         if self.subscription_end:

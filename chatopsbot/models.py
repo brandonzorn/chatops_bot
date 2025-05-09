@@ -74,7 +74,11 @@ class Employee(Base):
     )
     role = relationship("Role")
 
-    position = Column(Enum(PositionEnum), nullable=True)
+    position = Column(
+        Enum(PositionEnum),
+        default=PositionEnum.DEVELOPER,
+        nullable=False,
+    )
 
     team_id = Column(
         Integer,

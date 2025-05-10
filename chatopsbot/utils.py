@@ -83,8 +83,8 @@ async def remove_from_chats(
     ]
 
     for chat_id in chat_ids:
-        await context.bot.ban_chat_member(chat_id, employee.telegram_id)
-        await context.bot.unban_chat_member(chat_id, employee.telegram_id)
+        await context.bot.ban_chat_member(chat_id, employee.id)
+        await context.bot.unban_chat_member(chat_id, employee.id)
 
 
 __all__ = [

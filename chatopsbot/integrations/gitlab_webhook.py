@@ -16,8 +16,8 @@ async def gitlab_webhook(request: Request):
     data = await request.json()
     event_type = request.headers.get("X-Gitlab-Event")
 
-    if event_type == "Merge Request Hook":
-        action = data["object_attributes"]["action"]
+    if (event_type == "Merge Request Hook"
+            and data["object_attributes"]["action"] == "merge"):
         repo_name = data["project"]["name"]
         mr_title = data["object_attributes"]["title"]
         mr_url = data["object_attributes"]["url"]

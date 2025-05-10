@@ -5,6 +5,8 @@ from telegram.ext import Application
 
 from config import BOT_TOKEN
 from handlers.admin import (
+    add_role_handler,
+    add_team_conv,
     register_chat_conv,
     review_conv,
     delete_conv,
@@ -44,6 +46,8 @@ def main() -> None:
     application.add_handler(weekly_report_handler)
 
     # admin
+    application.add_handler(add_role_handler)
+    application.add_handler(add_team_conv)
     application.add_handler(register_chat_conv)
     application.add_handler(review_conv)
     application.add_handler(delete_conv)

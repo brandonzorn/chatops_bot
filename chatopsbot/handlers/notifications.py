@@ -93,7 +93,7 @@ async def cancel(update: Update, _):
 
 
 subscribe_conv = ConversationHandler(
-    entry_points=[CommandHandler("subscribe", start_subscribe)],
+    entry_points=[CommandHandler("gitlab_subscribe", start_subscribe)],
     states={
         CHOOSE_SERVICE: [
             CallbackQueryHandler(handle_service_choice, pattern="^subscribe_"),

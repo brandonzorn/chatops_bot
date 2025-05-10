@@ -17,7 +17,10 @@ if USE_SQLITE_DATABASE:
     Path("sqlite").mkdir(exist_ok=True)
     DATABASE_URL = f"sqlite:///sqlite/{DATABASE_NAME}.db"
 else:
-    DATABASE_URL = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
+    DATABASE_URL = (
+        f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@"
+        f"{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}",
+    )
 
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)

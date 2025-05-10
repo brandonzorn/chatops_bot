@@ -73,7 +73,22 @@ async def send_invite_links(employee, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def remove_from_chats(
+        employee: Employee,
+        context: ContextTypes.DEFAULT_TYPE,
+):
+    chat_ids = [
+        employee.team.chat_id,
+        employee.role.chat_id,
+    ]
+
+    for chat_id in chat_ids:
+        await context.ban_chat_member(chat_id, employee.telegram_id)
+        await context.unban_chat_member(chat_id, employee.telegram_id)
+
+
 __all__ = [
+    "remove_from_chats",
     "require_admin",
     "require_registration",
     "send_invite_links",

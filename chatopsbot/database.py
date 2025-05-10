@@ -19,7 +19,7 @@ if USE_SQLITE_DATABASE:
 else:
     DATABASE_URL = (
         f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@"
-        f"{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}",
+        f"{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
     )
 
 engine = create_engine(DATABASE_URL)

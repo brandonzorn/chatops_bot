@@ -1,4 +1,5 @@
 from .add_role import add_role_handler
+from .add_service import add_service_conv
 from .add_team import add_team_conv
 from .review_requests import review_conv
 from .register_chat import register_chat_conv
@@ -8,6 +9,7 @@ from .change_threshold import threshold_conv
 
 __all__ = [
     "add_role_handler",
+    "add_service_conv",
     "add_team_conv",
     "register_chat_conv",
     "review_conv",

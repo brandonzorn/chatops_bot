@@ -8,6 +8,7 @@ from config import BOT_TOKEN
 from consts import TIMEZONE
 from handlers.admin import (
     add_role_handler,
+    add_service_conv,
     add_team_conv,
     register_chat_conv,
     review_conv,
@@ -68,6 +69,7 @@ def main() -> None:
 
     # admin
     application.add_handler(add_role_handler)
+    application.add_handler(add_service_conv)
     application.add_handler(add_team_conv)
     application.add_handler(register_chat_conv)
     application.add_handler(review_conv)

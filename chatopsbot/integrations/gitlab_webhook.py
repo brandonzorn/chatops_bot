@@ -2,7 +2,7 @@ from fastapi import HTTPException, Request, FastAPI
 
 from config import GITLAB_WEBHOOKS_TOKEN
 from database import session
-from models import Service, ServiceSubscription
+from models import Service, MergeRequest
 
 app = FastAPI()
 
@@ -28,12 +28,13 @@ async def gitlab_webhook(request: Request):
         if not service:
             return {"status": "service not registered"}
 
-        subscriptions = session.query(
-            ServiceSubscription,
-        ).filter_by(service_id=service.id).all()
-        for subscription in subscriptions:
-            employee_id = subscription.employee_id
-
+        merge_request = MergeRequest(
+            service_id=service.id,
+            title=mr_title,
+            url=mr_url,
+        )
+        session.add(merge_request)
+        session.commit()
     return {"status": "ok"}
 
 

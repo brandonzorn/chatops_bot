@@ -15,6 +15,7 @@ from handlers.admin import (
     change_conv,
     threshold_conv,
 )
+from handlers.gitlab_alerts import check_all_merge_requests
 from handlers.grafana_alerts import (
     check_all_services,
     grafana_acknowledge_handler,
@@ -52,6 +53,11 @@ def main() -> None:
         check_all_services,
         datetime.timedelta(minutes=10),
         name="check_services",
+    )
+    job_queue.run_repeating(
+        check_all_merge_requests,
+        datetime.timedelta(seconds=30),
+        name="check_merge_requests",
     )
 
     application.add_handler(registration_conv)

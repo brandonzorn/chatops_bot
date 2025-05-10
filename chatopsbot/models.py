@@ -167,9 +167,33 @@ class ServiceIncident(Base):
         self.acknowledged = True
 
 
+class MergeRequest(Base):
+    __tablename__ = "merge_request"
+
+    id = Column(Integer, primary_key=True)
+    service_id = Column(Integer, ForeignKey("services.id"))
+    title = Column(String, nullable=False)
+    url = Column(String, nullable=True)
+    author = Column(String, nullable=True)
+    acknowledged = Column(Boolean, default=False, nullable=False)
+    timestamp = Column(
+        DateTime,
+        default=datetime.datetime.now(tz=TIMEZONE),
+    )
+
+    service = relationship("Service", lazy="joined")
+
+    def get_service_chat(self):
+        return self.service.team.chat_id
+
+    def acknowledge(self):
+        self.acknowledged = True
+
+
 __all__ = [
     "Base",
     "Employee",
+    "MergeRequest",
     "RegistrationRequest",
     "Role",
     "Service",

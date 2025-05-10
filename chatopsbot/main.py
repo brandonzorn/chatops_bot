@@ -1,9 +1,11 @@
 import datetime
 import logging
+from pathlib import Path
 
 from telegram.ext import Application
 
 from config import BOT_TOKEN
+from consts import TIMEZONE
 from handlers.admin import (
     add_role_handler,
     add_team_conv,
@@ -16,14 +18,24 @@ from handlers.admin import (
 from handlers.alerts import acknowledge_handler, check_all_services
 from handlers.notifications import subscribe_conv, silence_handler
 from handlers.registration import registration_conv
+from handlers.reports import weekly_report_handler
 
 __all__ = []
 
-from handlers.reports import weekly_report_handler
 
+Path("logs").mkdir(exist_ok=True)
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
+    handlers=[
+        logging.FileHandler(
+            datetime.datetime.now(
+                tz=TIMEZONE,
+            ).strftime("logs/%Y-%m-%d_%H-%M-%S.log"),
+            encoding="utf-8",
+        ),
+        logging.StreamHandler(),
+    ],
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)

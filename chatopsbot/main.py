@@ -15,7 +15,10 @@ from handlers.admin import (
     change_conv,
     threshold_conv,
 )
-from handlers.alerts import acknowledge_handler, check_all_services
+from handlers.grafana_alerts import (
+    check_all_services,
+    grafana_acknowledge_handler,
+)
 from handlers.notifications import subscribe_conv, silence_handler
 from handlers.registration import registration_conv
 from handlers.reports import weekly_report_handler
@@ -54,7 +57,7 @@ def main() -> None:
     application.add_handler(registration_conv)
     application.add_handler(subscribe_conv)
     application.add_handler(silence_handler)
-    application.add_handler(acknowledge_handler)
+    application.add_handler(grafana_acknowledge_handler)
     application.add_handler(weekly_report_handler)
 
     # admin

@@ -101,10 +101,13 @@ async def check_acknowledgement(context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-acknowledge_handler = CallbackQueryHandler(handle_acknowledge, pattern="^ack_")
+grafana_acknowledge_handler = CallbackQueryHandler(
+    handle_acknowledge,
+    pattern="^ack_",
+)
 
 
 __all__ = [
-    "acknowledge_handler",
+    "grafana_acknowledge_handler",
     "check_all_services",
 ]

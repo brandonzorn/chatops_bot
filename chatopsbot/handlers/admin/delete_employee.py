@@ -3,15 +3,16 @@ from telegram import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,
 )
+from telegram.error import BadRequest
 from telegram.ext import (
     ConversationHandler,
     CommandHandler,
-    CallbackQueryHandler,
+    CallbackQueryHandler, ContextTypes,
 )
 
 from database import session
 from models import Employee
-from utils import require_admin
+from utils import require_admin, remove_from_chats
 
 CHOOSE_EMPLOYEE = 0
 
@@ -35,7 +36,10 @@ async def start_remove_user(update: Update, _):
     return CHOOSE_EMPLOYEE
 
 
-async def confirm_remove_user(update: Update, _):
+async def confirm_remove_user(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+):
     query = update.callback_query
     await query.answer()
 
@@ -46,9 +50,18 @@ async def confirm_remove_user(update: Update, _):
         await query.edit_message_text("Сотрудник не найден.")
         return ConversationHandler.END
 
-    session.delete(employee)
-    session.commit()
-    await query.edit_message_text(f"👤 Сотрудник {employee.full_name} удалён.")
+    try:
+        await remove_from_chats(employee, context)
+        session.delete(employee)
+        session.commit()
+    except BadRequest:
+        await query.edit_message_text(
+            f"👤 Ошибка при удалении сотрудника {employee.full_name}.",
+        )
+    else:
+        await query.edit_message_text(
+            f"👤 Сотрудник {employee.full_name} удалён.",
+        )
     return ConversationHandler.END
 
 

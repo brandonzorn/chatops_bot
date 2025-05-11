@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler
 
 from consts import TIMEZONE
 from database import session
-from models import Service, ServiceIncident
+from models import Service, ServiceIncident, Team, MergeRequest
 
 
 def _generate_weekly_incident_report():
@@ -14,24 +14,48 @@ def _generate_weekly_incident_report():
         tz=TIMEZONE,
     ) - datetime.timedelta(days=7)
 
-    results = (
+    incidents = (
         session.query(
-            Service.name,
+            Team.name.label("team_name"),
             func.count(ServiceIncident.id).label("incident_count"),
         )
-        .join(ServiceIncident.service)
+        .join(Service, Service.team_id == Team.id)
+        .join(ServiceIncident, ServiceIncident.service_id == Service.id)
         .filter(ServiceIncident.timestamp >= one_week_ago)
-        .group_by(Service.id)
-        .order_by(Service.name)
+        .group_by(Team.id)
+        .order_by(Team.name)
         .all()
     )
 
-    report_lines = ["📊 Еженедельный отчёт по инцидентам:", ""]
-    for name, count in results:
-        report_lines.append(f"• {name} — {count} инцидентов")
+    mr_results = (
+        session.query(
+            Team.name.label("team_name"),
+            func.count(MergeRequest.id).label("mr_count"),
+        )
+        .join(Service, Service.team_id == Team.id)
+        .join(MergeRequest, MergeRequest.service_id == Service.id)
+        .filter(MergeRequest.timestamp >= one_week_ago)
+        .group_by(Team.id)
+        .order_by(Team.name)
+        .all()
+    )
 
-    if not results:
-        report_lines.append("Инцидентов за неделю не зафиксировано.")
+    report_lines = ["📊 Еженедельный отчёт:", "", "🔧 Инциденты:"]
+
+    if incidents:
+        for name, count in incidents:
+            report_lines.append(f"• {name} — {count} инцидентов")
+    else:
+        report_lines.append("Нет инцидентов за прошедшую неделю.")
+
+    report_lines.append("")
+    report_lines.append("🧩 Merge Requests:")
+
+    if mr_results:
+        for name, count in mr_results:
+            report_lines.append(f"• {name} — {count} MR")
+    else:
+        report_lines.append("Нет Merge Requests за прошедшую неделю.")
 
     return "\n".join(report_lines)
 

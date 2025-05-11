@@ -7,6 +7,7 @@ from telegram.ext import CommandHandler
 from consts import TIMEZONE
 from database import session
 from models import Service, ServiceIncident, Team, MergeRequest
+from utils import require_admin
 
 
 def _generate_weekly_incident_report():
@@ -60,6 +61,7 @@ def _generate_weekly_incident_report():
     return "\n".join(report_lines)
 
 
+@require_admin
 async def send_weekly_report(update: Update, _):
     await update.message.reply_text(
         _generate_weekly_incident_report(),

@@ -1,5 +1,6 @@
 import logging
 
+from httpx import ConnectError
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import BadRequest
 from telegram.ext import CallbackQueryHandler, ContextTypes
@@ -15,7 +16,13 @@ logger = logging.getLogger(__name__)
 async def check_all_services(context: ContextTypes.DEFAULT_TYPE):
     services = session.query(Service).all()
     for service in services:
-        result = await check_service(service)
+        try:
+            result = await check_service(service)
+        except ConnectError:
+            logger.error(
+                f"Grafana Loki: ошибка подключения сервиса {service.name}",
+            )
+            return
         if result <= service.notification_threshold:
             return
         message_id = None

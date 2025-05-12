@@ -138,7 +138,10 @@ async def cancel(update: Update, _):
 
 registration_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("register", start_register)],
+    entry_points=[
+        CommandHandler("start", start_register),
+        CommandHandler("register", start_register),
+    ],
     states={
         ASK_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, ask_role)],
         ASK_ROLE: [CallbackQueryHandler(ask_team, pattern="^role_")],

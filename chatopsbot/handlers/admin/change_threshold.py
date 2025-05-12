@@ -85,6 +85,7 @@ async def cancel(update: Update, _):
 
 
 threshold_conv = ConversationHandler(
+    allow_reentry=True,
     entry_points=[CommandHandler("change_threshold", start_set_threshold)],
     states={
         CHOOSE_SERVICE: [

@@ -78,7 +78,7 @@ delete_conv = ConversationHandler(
             CallbackQueryHandler(confirm_remove_user, pattern="^remove_"),
         ],
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler("cancel", cancel)],
 )
 
 

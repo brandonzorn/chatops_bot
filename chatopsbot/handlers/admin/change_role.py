@@ -86,6 +86,11 @@ async def apply_role_update(
     return ConversationHandler.END
 
 
+async def cancel(update: Update, _):
+    await update.message.reply_text("Операция отменена.")
+    return ConversationHandler.END
+
+
 change_conv = ConversationHandler(
     allow_reentry=True,
     entry_points=[CommandHandler("change_role", start_change_role)],
@@ -97,7 +102,7 @@ change_conv = ConversationHandler(
             CallbackQueryHandler(apply_role_update, pattern="^newRole_"),
         ],
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler("cancel", cancel)],
 )
 
 

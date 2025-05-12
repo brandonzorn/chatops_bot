@@ -65,6 +65,11 @@ async def confirm_remove_user(
     return ConversationHandler.END
 
 
+async def cancel(update: Update, _):
+    await update.message.reply_text("Операция отменена.")
+    return ConversationHandler.END
+
+
 delete_conv = ConversationHandler(
     allow_reentry=True,
     entry_points=[CommandHandler("delete_employee", start_remove_user)],

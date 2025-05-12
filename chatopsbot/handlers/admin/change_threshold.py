@@ -80,7 +80,7 @@ async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def cancel(update: Update, _):
-    await update.message.reply_text("Отменено.")
+    await update.message.reply_text("Операция отменена.")
     return ConversationHandler.END
 
 

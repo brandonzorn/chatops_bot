@@ -3,7 +3,7 @@ from functools import wraps
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from config import ADMIN_TELEGRAM_ID
+from config import ADMIN_TELEGRAM_IDS
 from database import session
 from models import Employee
 
@@ -39,7 +39,7 @@ def require_admin(func):
             *args,
             **kwargs,
     ):
-        if str(update.effective_user.id) != ADMIN_TELEGRAM_ID:
+        if str(update.effective_user.id) not in ADMIN_TELEGRAM_IDS:
             await update.message.reply_text(
                 "⛔ У вас нет доступа к этой команде.",
             )

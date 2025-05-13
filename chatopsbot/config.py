@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_TELEGRAM_ID = os.getenv("ADMIN_TELEGRAM_ID")
+ADMIN_TELEGRAM_IDS = os.getenv("ADMIN_TELEGRAM_IDS").split(",")
 
 USE_SQLITE_DATABASE = bool(os.getenv("USE_SQLITE_DATABASE") == "True")
 DATABASE_NAME = os.getenv("DATABASE_NAME")

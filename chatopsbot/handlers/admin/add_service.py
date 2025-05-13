@@ -93,7 +93,13 @@ async def cancel(update: Update, _) -> int:
 
 add_service_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("add_service", start_add_service)],
+    entry_points=[
+        CommandHandler("add_service", start_add_service),
+        MessageHandler(
+            filters.TEXT & filters.Regex(r"(?i)^Добавить сервис$"),
+            start_add_service,
+        ),
+    ],
     states={
         ASK_SERVICE_NAME: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, save_service_name),

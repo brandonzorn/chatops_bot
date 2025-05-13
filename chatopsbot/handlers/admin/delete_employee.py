@@ -7,7 +7,10 @@ from telegram.error import BadRequest
 from telegram.ext import (
     ConversationHandler,
     CommandHandler,
-    CallbackQueryHandler, ContextTypes,
+    CallbackQueryHandler,
+    ContextTypes,
+    filters,
+    MessageHandler,
 )
 
 from database import session
@@ -72,7 +75,13 @@ async def cancel(update: Update, _):
 
 delete_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("delete_employee", start_remove_user)],
+    entry_points=[
+        CommandHandler("delete_employee", start_remove_user),
+        MessageHandler(
+            filters.TEXT & filters.Regex(r"(?i)^Удалить сотрудника$"),
+            start_remove_user,
+        ),
+    ],
     states={
         CHOOSE_EMPLOYEE: [
             CallbackQueryHandler(confirm_remove_user, pattern="^remove_"),

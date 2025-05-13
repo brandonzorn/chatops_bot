@@ -7,6 +7,8 @@ from telegram.ext import (
     CommandHandler,
     CallbackQueryHandler,
     ConversationHandler,
+    MessageHandler,
+    filters,
 )
 
 from database import session
@@ -124,7 +126,13 @@ async def cancel(update: Update, _):
 
 register_chat_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("register_chat", start_register)],
+    entry_points=[
+        CommandHandler("register_chat", start_register),
+        MessageHandler(
+            filters.TEXT & filters.Regex(r"(?i)^Зарегистрировать чат$"),
+            start_register,
+        ),
+    ],
     states={
         CHOOSE_TYPE: [
             CallbackQueryHandler(

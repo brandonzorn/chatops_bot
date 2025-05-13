@@ -60,7 +60,13 @@ async def cancel(update: Update, _) -> int:
 
 add_team_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("add_team", start_add_team)],
+    entry_points=[
+        CommandHandler("add_team", start_add_team),
+        MessageHandler(
+            filters.TEXT & filters.Regex(r"(?i)^Добавить команду$"),
+            start_add_team,
+        ),
+    ],
     states={
         ASK_TEAM_NAME: [
             MessageHandler(

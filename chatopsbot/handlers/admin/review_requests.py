@@ -8,6 +8,8 @@ from telegram.ext import (
     ContextTypes,
     CommandHandler,
     CallbackQueryHandler,
+    MessageHandler,
+    filters,
 )
 
 from database import session
@@ -126,7 +128,13 @@ async def cancel(update: Update, _):
 
 review_conv = ConversationHandler(
     allow_reentry=True,
-    entry_points=[CommandHandler("review_requests", start_review)],
+    entry_points=[
+        CommandHandler("review_requests", start_review),
+        MessageHandler(
+            filters.TEXT & filters.Regex(r"(?i)^Просмотр заявок$"),
+            start_review,
+        ),
+    ],
     states={
         CHOOSE_REQUEST: [
             CallbackQueryHandler(view_request, pattern="^view_"),

@@ -7,7 +7,7 @@ from telegram.ext import Application
 from config import BOT_TOKEN
 from consts import TIMEZONE
 from handlers.admin import (
-    add_role_handler,
+    add_role_conv,
     add_service_conv,
     add_team_conv,
     register_chat_conv,
@@ -68,7 +68,7 @@ def main() -> None:
     application.add_handler(weekly_report_handler)
 
     # admin
-    application.add_handler(add_role_handler)
+    application.add_handler(add_role_conv)
     application.add_handler(add_service_conv)
     application.add_handler(add_team_conv)
     application.add_handler(register_chat_conv)

@@ -15,8 +15,10 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
+from config import ADMIN_TELEGRAM_IDS
 from database import session
 from models import Team, RegistrationRequest, Role
+from utils import get_admin_keyboard
 
 ASK_NAME, ASK_ROLE, ASK_TEAM, ASK_PHONE = range(4)
 
@@ -124,9 +126,13 @@ async def save_registration(
     session.add(request)
     session.commit()
 
+    reply_markup = ReplyKeyboardRemove()
+    if telegram_id in ADMIN_TELEGRAM_IDS:
+        reply_markup = get_admin_keyboard()
+
     await update.message.reply_text(
         "Заявка на регистрацию отправлена. Ожидайте подтверждения.",
-        reply_markup=ReplyKeyboardRemove(),
+        reply_markup=reply_markup,
     )
     return ConversationHandler.END
 

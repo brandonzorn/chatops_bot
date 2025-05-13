@@ -1,11 +1,23 @@
 from functools import wraps
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
 
 from config import ADMIN_TELEGRAM_IDS
 from database import session
 from models import Employee
+
+
+def get_admin_keyboard():
+    return ReplyKeyboardMarkup(
+        [
+            ["Добавить роль", "Добавить команду"],
+            ["Добавить сервис", "Зарегистрировать чат"],
+            ["Просмотр заявок", "Удалить сотрудника"],
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
 
 
 def require_registration(func):
@@ -88,6 +100,7 @@ async def remove_from_chats(
 
 
 __all__ = [
+    "get_admin_keyboard",
     "remove_from_chats",
     "require_admin",
     "require_registration",

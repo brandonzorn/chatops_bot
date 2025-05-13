@@ -127,7 +127,7 @@ async def save_registration(
     session.commit()
 
     reply_markup = ReplyKeyboardRemove()
-    if telegram_id in ADMIN_TELEGRAM_IDS:
+    if str(telegram_id) in ADMIN_TELEGRAM_IDS:
         reply_markup = get_admin_keyboard()
 
     await update.message.reply_text(

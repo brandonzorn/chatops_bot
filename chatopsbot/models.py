@@ -168,7 +168,7 @@ class ServiceIncident(Base):
 
 
 class MergeRequest(Base):
-    __tablename__ = "merge_request"
+    __tablename__ = "merge_requests"
 
     id = Column(Integer, primary_key=True)
     service_id = Column(Integer, ForeignKey("services.id"))

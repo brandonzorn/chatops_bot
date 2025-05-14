@@ -2,9 +2,9 @@ import re
 import httpx
 from datetime import datetime, timedelta
 
+from config import GRAFANA_URL
 from models import Service
 
-LOKI_URL = "http://localhost:3100/loki/api/v1/query_range"
 STEP = "1m"
 
 
@@ -42,7 +42,10 @@ async def check_service(service: Service):
     }
 
     async with httpx.AsyncClient(timeout=10.0) as client:
-        response = await client.get(LOKI_URL, params=params)
+        response = await client.get(
+            f"{GRAFANA_URL}/loki/api/v1/query_range",
+            params=params,
+        )
         response.raise_for_status()
         data = response.json()
 

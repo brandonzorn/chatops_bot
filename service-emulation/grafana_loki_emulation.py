@@ -21,7 +21,14 @@ HTTP_CODES = [
     "500 Internal Server Error",
 ]
 
-APPS = ["Payment API", "Billing Engine", "Notification Dispatcher", "Email Sender", "SMS Gateway"]
+APPS = [
+    "Payment API",
+    "Billing Engine",
+    "Notification Dispatcher",
+    "Email Sender",
+    "SMS Gateway",
+    "chat_ops",
+]
 
 def generate_random_logs(count=100, max_minutes_ago=15):
     now_ns = int(time.time() * 1e9)

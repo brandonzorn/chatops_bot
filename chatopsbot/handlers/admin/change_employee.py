@@ -12,7 +12,7 @@ from telegram.ext import (
 
 from database import session
 from models import Employee, Role, Team
-from utils import require_admin
+from utils import require_admin, send_invite_links
 
 CHOOSE_EMPLOYEE, CHOOSE_NEW_ROLE, CHOOSE_NEW_TEAM = range(3)
 
@@ -105,6 +105,8 @@ async def apply_role_update(
     employee.role_id = new_role_id
     employee.team_id = new_team_id
     session.commit()
+
+    await send_invite_links(employee, context)
 
     await query.edit_message_text(
         f"🔄 Роль и команда сотрудника {employee.full_name} обновлены.",

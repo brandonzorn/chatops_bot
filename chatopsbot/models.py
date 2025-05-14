@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy import (
     Column,
+    BigInteger,
     Integer,
     String,
     ForeignKey,
@@ -63,7 +64,7 @@ class Team(Base):
 class Employee(Base):
     __tablename__ = "employees"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     full_name = Column(String(150), nullable=False)
     telegram_username = Column(String(100), unique=True, nullable=True)
     phone_number = Column(String(20), nullable=True)
@@ -94,7 +95,7 @@ class ServiceSubscription(Base):
 
     id = Column(Integer, primary_key=True)
     employee_id = Column(
-        Integer,
+        BigInteger,
         ForeignKey("employees.id", ondelete="CASCADE"),
         nullable=False,
     )
@@ -123,7 +124,7 @@ class ServiceSubscription(Base):
 class RegistrationRequest(Base):
     __tablename__ = "registration_requests"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     full_name = Column(String(255), nullable=False)
     telegram_username = Column(String(255), unique=True, nullable=True)
     phone_number = Column(String(50), nullable=True)

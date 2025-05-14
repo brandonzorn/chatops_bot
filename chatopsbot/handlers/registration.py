@@ -32,6 +32,11 @@ async def ask_role(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["full_name"] = update.message.text
 
     roles = session.query(Role).all()
+    if not roles:
+        await update.message.reply_text(
+            "Роли не найдены. Регистрация отменена.",
+        )
+        return ConversationHandler.END
     keyboard = [
         [InlineKeyboardButton(role.role_name, callback_data=f"role_{role.id}")]
         for role in roles
@@ -51,6 +56,11 @@ async def ask_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["role_id"] = query.data.split("_")[1]
 
     teams = session.query(Team).all()
+    if not teams:
+        await update.message.reply_text(
+            "Команды не найдены. Регистрация отменена.",
+        )
+        return ConversationHandler.END
     keyboard = [
         [InlineKeyboardButton(team.name, callback_data=f"team_{team.id}")]
         for team in teams

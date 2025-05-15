@@ -95,6 +95,8 @@ async def remove_from_chats(
     ]
 
     for chat_id in chat_ids:
+        if chat_id is None:
+            continue
         await context.bot.ban_chat_member(chat_id, employee.id)
         await context.bot.unban_chat_member(chat_id, employee.id)
 

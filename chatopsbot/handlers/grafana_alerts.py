@@ -22,9 +22,9 @@ async def check_all_services(context: ContextTypes.DEFAULT_TYPE):
             logger.error(
                 f"Grafana Loki: ошибка подключения сервиса {service.name}",
             )
-            return
+            continue
         if result <= service.notification_threshold:
-            return
+            continue
         message_id = None
         try:
             message = await context.bot.send_message(

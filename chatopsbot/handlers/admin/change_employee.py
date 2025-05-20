@@ -3,6 +3,7 @@ from telegram import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,
 )
+from telegram.error import BadRequest
 from telegram.ext import (
     ConversationHandler,
     CommandHandler,
@@ -106,7 +107,10 @@ async def apply_role_update(
     employee.team_id = new_team_id
     session.commit()
 
-    await remove_from_chats(employee, context)
+    try:
+        await remove_from_chats(employee, context)
+    except BadRequest:
+        pass
     await send_invite_links(employee, context)
 
     await query.edit_message_text(

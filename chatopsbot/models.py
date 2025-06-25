@@ -176,6 +176,7 @@ class MergeRequest(Base):
     title = Column(String, nullable=False)
     url = Column(String, nullable=True)
     author = Column(String, nullable=True)
+    status = Column(String, nullable=True)
     acknowledged = Column(Boolean, default=False, nullable=False)
     timestamp = Column(
         DateTime,

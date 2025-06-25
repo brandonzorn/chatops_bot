@@ -26,7 +26,8 @@ async def check_all_merge_requests(context: ContextTypes.DEFAULT_TYPE):
                 await context.bot.send_message(
                     chat_id=subscription.employee_id,
                     text=f"MR {merge_request.title} для сервиса "
-                         f"{merge_request.service.name} получил статус merged",
+                         f"{merge_request.service.name} получил статус "
+                         f"{merge_request.status}",
                 )
             except BadRequest:
                 logger.error("Не удалось отправить сообщение пользователю.")

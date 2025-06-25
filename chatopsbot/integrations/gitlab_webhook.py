@@ -17,10 +17,11 @@ async def gitlab_webhook(request: Request):
     event_type = request.headers.get("X-Gitlab-Event")
 
     if (event_type == "Merge Request Hook"
-            and data["object_attributes"]["action"] == "merge"):
+            and data["object_attributes"]["action"] in ("merge", "open")):
         repo_name = data["project"]["name"]
         mr_title = data["object_attributes"]["title"]
         mr_url = data["object_attributes"]["url"]
+        mr_status = data["object_attributes"]["action"]
 
         service = session.query(
             Service,
@@ -32,6 +33,7 @@ async def gitlab_webhook(request: Request):
             service_id=service.id,
             title=mr_title,
             url=mr_url,
+            status=mr_status,
         )
         session.add(merge_request)
         session.commit()

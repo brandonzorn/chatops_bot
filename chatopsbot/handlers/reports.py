@@ -36,6 +36,7 @@ def _generate_weekly_incident_report():
         .join(Service, Service.team_id == Team.id)
         .join(MergeRequest, MergeRequest.service_id == Service.id)
         .filter(MergeRequest.timestamp >= one_week_ago)
+        .where(MergeRequest.status == "merge")
         .group_by(Team.id)
         .order_by(Team.name)
         .all()

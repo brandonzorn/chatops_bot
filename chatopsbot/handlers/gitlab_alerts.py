@@ -35,7 +35,8 @@ async def check_all_merge_requests(context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=merge_request.get_service_chat(),
                 text=f"MR {merge_request.title} для сервиса "
-                     f"{merge_request.service.name} получил статус merged",
+                     f"{merge_request.service.name} получил статус "
+                     f"{merge_request.status}",
             )
         except BadRequest:
             logger.error(f"Чат {merge_request.name} не найден.")
